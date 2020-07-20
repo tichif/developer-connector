@@ -1,0 +1,3 @@
+{
+  "mongoURI": "mongodb+srv://tichif123:tichif123@devconnector.cazth.mongodb.net/devConnector?retryWrites=true&w=majority"
+}
