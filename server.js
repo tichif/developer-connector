@@ -7,6 +7,9 @@ const app = express();
 // Connect Database
 connectDB();
 
+// Body parser
+app.use(express.json({ extended: false }));
+
 app.get('/', (req, res, next) => res.send('Api running'));
 
 // Define routes
