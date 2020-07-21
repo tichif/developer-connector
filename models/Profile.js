@@ -28,7 +28,7 @@ const ProfileSchema = new mongoose.Schema({
   githubusername: {
     type: String,
   },
-  experiences: [
+  experience: [
     {
       title: {
         type: String,
@@ -40,7 +40,6 @@ const ProfileSchema = new mongoose.Schema({
       },
       location: {
         type: String,
-        required: true,
       },
       from: {
         type: Date,
@@ -51,7 +50,7 @@ const ProfileSchema = new mongoose.Schema({
       },
       current: {
         type: Boolean,
-        required: true,
+        default: false,
       },
       description: {
         type: String,
@@ -81,7 +80,7 @@ const ProfileSchema = new mongoose.Schema({
       },
       current: {
         type: Boolean,
-        required: true,
+        default: false,
       },
       description: {
         type: String,
@@ -89,19 +88,19 @@ const ProfileSchema = new mongoose.Schema({
     },
   ],
   social: {
-    facebook: {
+    youtube: {
       type: String,
     },
     twitter: {
       type: String,
     },
-    instagram: {
+    facebook: {
       type: String,
     },
     linkedin: {
       type: String,
     },
-    youtube: {
+    instagram: {
       type: String,
     },
   },
@@ -111,4 +110,4 @@ const ProfileSchema = new mongoose.Schema({
   },
 });
 
-module.export = Profile = mongoose.model('profile', ProfileSchema);
+module.exports = mongoose.model('profile', ProfileSchema);
