@@ -1,4 +1,6 @@
 {
   "mongoURI": "mongodb+srv://tichif123:tichif123@devconnector.irrar.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "secrettoken"
+  "jwtSecret": "secrettoken",
+  "githubclient": "12fa0b251655084e4ea1",
+  "githubsecret": "f97b6941ab17511b68e761e3552232f7a46e9e87"
 }

@@ -1,5 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
+const request = require('request');
+const config = require('config');
 
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
@@ -363,6 +365,42 @@ router.delete('/education/:exp_id', auth, async (req, res) => {
     await profile.save();
 
     res.send(profile);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   DELETE /api/profile/github/:username
+// @desc    Get latest github repos from Github
+// @access  Public
+router.get('/github/:username', async (req, res) => {
+  try {
+    const options = {
+      uri: `https://api.github.com/users/${
+        req.params.username
+      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+        'githubclient'
+      )}&client_secret=${config.get('githubsecret')}`,
+      method: 'GET',
+      headers: {
+        'user-agent': 'node.js',
+      },
+    };
+    request(options, (error, response, body) => {
+      if (error) console.log(error);
+
+      if (response.statusCode !== 200) {
+        return res.status(404).json({
+          errors: [
+            {
+              msg: 'No Github profile found',
+            },
+          ],
+        });
+      }
+      res.send(JSON.parse(body));
+    });
   } catch (err) {
     console.log(err.message);
     res.status(500).send('Server Error');
