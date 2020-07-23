@@ -233,4 +233,138 @@ router.put('/unlike/:post_id', auth, async (req, res) => {
   }
 });
 
+// @route   POST /api/posts/comments/:post_id
+// @desc    Create comment to a specific post
+// @access  Private
+router.post(
+  '/comments/:post_id',
+  [auth, [body('text', 'The content is required').notEmpty()]],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const user = await User.findById(req.user.id).select('-password');
+
+      if (!user) {
+        return res.status(401).json({
+          errors: [
+            {
+              msg: 'User not found',
+            },
+          ],
+        });
+      }
+
+      const post = await Post.findById(req.params.post_id);
+
+      if (!post) {
+        return res.status(404).json({
+          errors: [
+            {
+              msg: 'Post not found',
+            },
+          ],
+        });
+      }
+
+      const comment = {
+        text: req.body.text,
+        name: user.name,
+        avatar: user.avatar,
+        user: req.user.id,
+      };
+
+      post.comments.unshift(comment);
+
+      await post.save();
+
+      res.send(post.comments);
+    } catch (err) {
+      console.log(err.message);
+      if (err.kind === 'ObjectId') {
+        return res.status(404).json({
+          errors: [
+            {
+              msg: 'Post not found',
+            },
+          ],
+        });
+      }
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route   DELETE /api/posts/comments/:post_id/:comment:id
+// @desc    Delete comment to a specific post
+// @access  Private
+router.delete('/comments/:post_id/:comment_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    // Check if the posts exists
+    if (!post) {
+      return res.status(404).json({
+        errors: [
+          {
+            msg: 'Post not found',
+          },
+        ],
+      });
+    }
+
+    // pull out comment
+    const comment = post.comments.find(
+      (comment) => comment.id.toString() === req.params.comment_id
+    );
+
+    // Check if comment exists
+    if (!comment) {
+      return res.status(404).json({
+        errors: [
+          {
+            msg: 'Comment not found',
+          },
+        ],
+      });
+    }
+
+    // Check if the user is the owner of the comment
+    if (comment.user.toString() !== req.user.id) {
+      return res.status(401).json({
+        errors: [
+          {
+            msg: 'Unauthorized action',
+          },
+        ],
+      });
+    }
+
+    // Find the index of the comment
+    const removedIndex = post.comments
+      .map((comment) => comment.user.toString())
+      .indexOf(req.user.id);
+
+    post.comments.splice(removedIndex, 1);
+
+    await post.save();
+
+    res.json(post.comments);
+  } catch (err) {
+    console.log(err.message);
+    if (err.kind === 'ObjectId') {
+      return res.status(404).json({
+        errors: [
+          {
+            msg: 'Post not found',
+          },
+        ],
+      });
+    }
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;
