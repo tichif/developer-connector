@@ -12,6 +12,8 @@ import Landing from './components/layouts/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Alert from './components/layouts/Alert';
+import Dashboard from './components/dashboard/Dashboard';
+import PrivateRoute from './components/routing/PrivateRoute';
 
 // Set the token in the global header
 if (localStorage.token) {
@@ -36,6 +38,11 @@ const App = () => {
             <Switch>
               <Route exact path='/register' component={Register}></Route>
               <Route exact path='/login' component={Login}></Route>
+              <PrivateRoute
+                exact
+                path='/dashboard'
+                component={Dashboard}
+              ></PrivateRoute>
             </Switch>
           </section>
         </Fragment>
