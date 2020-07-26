@@ -7,13 +7,14 @@ import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import { loadUser } from './actions/auth';
 
+import PrivateRoute from './components/routing/PrivateRoute';
 import Navbar from './components/layouts/Navbar';
 import Landing from './components/layouts/Landing';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import Alert from './components/layouts/Alert';
 import Dashboard from './components/dashboard/Dashboard';
-import PrivateRoute from './components/routing/PrivateRoute';
+import CreateProfile from './components/profile-form/CreateProfile';
 
 // Set the token in the global header
 if (localStorage.token) {
@@ -42,6 +43,11 @@ const App = () => {
                 exact
                 path='/dashboard'
                 component={Dashboard}
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path='/create-profile'
+                component={CreateProfile}
               ></PrivateRoute>
             </Switch>
           </section>
