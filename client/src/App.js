@@ -15,6 +15,7 @@ import Register from './components/auth/Register';
 import Alert from './components/layouts/Alert';
 import Dashboard from './components/dashboard/Dashboard';
 import CreateProfile from './components/profile-form/CreateProfile';
+import EditProfile from './components/profile-form/EditProfile';
 
 // Set the token in the global header
 if (localStorage.token) {
@@ -48,6 +49,11 @@ const App = () => {
                 exact
                 path='/create-profile'
                 component={CreateProfile}
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path='/edit-profile'
+                component={EditProfile}
               ></PrivateRoute>
             </Switch>
           </section>
