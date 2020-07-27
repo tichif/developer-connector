@@ -16,6 +16,8 @@ import Alert from './components/layouts/Alert';
 import Dashboard from './components/dashboard/Dashboard';
 import CreateProfile from './components/profile-form/CreateProfile';
 import EditProfile from './components/profile-form/EditProfile';
+import AddExperience from './components/profile-form/AddExperience';
+import AddEducation from './components/profile-form/AddEducation';
 
 // Set the token in the global header
 if (localStorage.token) {
@@ -54,6 +56,16 @@ const App = () => {
                 exact
                 path='/edit-profile'
                 component={EditProfile}
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path='/add-experience'
+                component={AddExperience}
+              ></PrivateRoute>
+              <PrivateRoute
+                exact
+                path='/add-education'
+                component={AddEducation}
               ></PrivateRoute>
             </Switch>
           </section>
