@@ -6,6 +6,7 @@ const config = require('config');
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 const router = express.Router();
 
@@ -165,7 +166,8 @@ router.get('/', async (req, res) => {
 // @access  Private
 router.delete('/', auth, async (req, res) => {
   try {
-    // @todo - remove user's posts
+    // remove user's posts
+    await Post.deleteMany({ user: req.user.id });
 
     // remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
@@ -371,7 +373,7 @@ router.delete('/education/:exp_id', auth, async (req, res) => {
   }
 });
 
-// @route   DELETE /api/profile/github/:username
+// @route   GET /api/profile/github/:username
 // @desc    Get latest github repos from Github
 // @access  Public
 router.get('/github/:username', async (req, res) => {
