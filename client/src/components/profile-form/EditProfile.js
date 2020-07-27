@@ -47,7 +47,7 @@ const EditProfile = ({
     });
 
     // eslint-disable-next-line
-  }, [loading]);
+  }, [loading, getCurrentProfile]);
 
   const {
     company,
